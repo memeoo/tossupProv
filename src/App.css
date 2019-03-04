@@ -1,5 +1,15 @@
 .App {
-  text-align: center;
+  margin-left: 75px;
+}
+
+.mainTitle{
+
+  font-size: 45px;
+}
+.form{
+  text-align: left;
+  margin-top: 45px;
+  width: 40%;
 }
 
 .App-logo {

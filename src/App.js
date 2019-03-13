@@ -59,10 +59,13 @@ class App extends Component {
       return;
     }
 
-    axios.get('http://localhost:3003/signup/', {
-      params: { id: sid, pass: spass, name: sname, smail: smail }
-    }).then(response => {
+    axios.post('http://localhost:3003/signup/', 
+       { id: sid, pass: spass, name: sname, smail: smail }
+    ).then(response => {
       console.log(" res >>>> ", response);
+      if(response.status == 200){
+        this.toggle();
+      }
     }).catch(exception => {
       console.log(" ex >>>> ", exception);
     })

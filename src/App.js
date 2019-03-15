@@ -8,10 +8,14 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modal: false
+      modal: false,
+      warningModal: false,
+      warningText:"",
     }
     this.toggle = this.toggle.bind(this);
-
+    this.warningToggle = this.warningToggle.bind(this);
+    // this.setWarningText = this.setWarningText.bind(this);
+    
   }
 
   toggle() {
@@ -19,6 +23,18 @@ class App extends Component {
       modal: !prevState.modal
     }));
   }
+
+  warningToggle(){
+    this.setState(prevState => ({
+      warningModal: !prevState.warningModal,
+    }));
+  }
+
+  // setWarningText(warningText){
+  //   this.setState({
+  //     warningText : warningText,
+  //   })
+  // }
 
   doLogin = (event) => {
     event.preventDefault()
@@ -28,14 +44,23 @@ class App extends Component {
     console.log(event.target.elements.id.value);
     console.log(event.target.id.value);
     console.log(event.target[0].value);
-
+    
+    if(uid.length === 0 || upass.length === 0){
+      return;
+    }
 
     axios.get('http://localhost:3003/login/', {
       params: { id: uid, pass: upass }
     }).then(response => {
       console.log(" res >>>> ", response);
+      if(response.data ==="login fail"){
+        this.state.warningText = "Check your ID and Password, again.";
+        this.warningToggle();
+      }
     }).catch(exception => {
       console.log(" ex >>>> ", exception);
+
+      // this.setWarningText("Check your ID and Password, again.");
     })
   }
 
@@ -55,7 +80,11 @@ class App extends Component {
     console.log(event.target.smail.value);
 
     if (spass !== repass) {
-      console.log(" 패쓰워드 확인 불일치 !!");
+      // this.setWarningText("Should input same password.");
+      this.state.warningText = "Should input same password.";
+      this.warningToggle();
+
+      console.log(" warning text => ", this.state.warningText)
       return;
     }
 
@@ -63,7 +92,7 @@ class App extends Component {
        { id: sid, pass: spass, name: sname, smail: smail }
     ).then(response => {
       console.log(" res >>>> ", response);
-      if(response.status == 200){
+      if(response.status === 200){
         this.toggle();
       }
     }).catch(exception => {
@@ -72,6 +101,7 @@ class App extends Component {
   }
 
   render() {
+  
     return (
       <div className="App">
         <div style={{ marginTop: "33px" }}>
@@ -124,6 +154,15 @@ class App extends Component {
                 <Button color="secondary" onClick={this.toggle}>Cancel</Button>
               </ModalFooter>
             </Form>
+          </Modal>
+          
+          <Modal isOpen={this.state.warningModal} toggle={this.warningToggle} >
+            <ModalHeader>
+              {this.state.warningText}
+            </ModalHeader>
+            <ModalFooter>
+                <Button color="secondary" onClick={this.warningToggle}>확인(OK)</Button>
+              </ModalFooter>
           </Modal>
         </div>
       </div>

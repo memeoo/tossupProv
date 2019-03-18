@@ -1,12 +1,27 @@
 import React from 'react';
-import './BigText.css';
+import '../css/setExam';
 
-const setTexam = ({children}) => {
-    return (
-        <div className="big-text">
-            {children}
-        </div>
-    );
-};
+class setExam extends Comment {
 
-export default setTexam;
+    constructor(props) {
+        super(props);
+        this.state = {
+
+        }
+        // this.toggle = this.toggle.bind(this);
+
+    }
+
+    render() {
+        return (
+            <div>
+                <div className='top-upper-layer'>
+                    안녕하세요, {}
+                </div>
+            </div>
+        );
+    }
+}
+
+
+export default setExam;

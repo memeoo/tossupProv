@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { Button, Form, FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import '../../src/App.css';
-
+import {withRouter} from 'react-router-dom';  
 import axios from 'axios';
 
 class Login extends Component {
@@ -37,9 +37,9 @@ class Login extends Component {
     let uid = event.target.id.value;
     let upass = event.target.pass.value;
 
-    console.log(event.target.elements.id.value);
-    console.log(event.target.id.value);
-    console.log(event.target[0].value);
+    // console.log(event.target.elements.id.value);
+    // console.log(event.target.id.value);
+    // console.log(event.target[0].value);
     
     if(uid.length === 0 || upass.length === 0){
       return;
@@ -48,14 +48,14 @@ class Login extends Component {
     axios.get('http://localhost:3003/login/', {
       params: { id: uid, pass: upass }
     }).then(response => {
-      console.log(" res >>>> ", response);
-      if(response.data ==="login fail"){
-        this.state.warningText = "Check your ID and Password, again.";
-        this.warningToggle();
-      }
+      console.log(" ######## ");
+      this.props.history.push('/setExample');
+
+
     }).catch(exception => {
       console.log(" ex >>>> ", exception);
-
+      this.state.warningText = "Check your ID and Password, again.";
+      this.warningToggle()
       // this.setWarningText("Check your ID and Password, again.");
     })
   }
@@ -95,6 +95,7 @@ class Login extends Component {
       console.log(" ex >>>> ", exception);
     })
   }
+
 
   render() {
   
@@ -165,5 +166,5 @@ class Login extends Component {
   }
 }
 
-
-export default Login;
+// export withRouter(Login);
+export default withRouter(Login);

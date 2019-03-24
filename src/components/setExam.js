@@ -1,7 +1,7 @@
-import React from 'react';
-import '../css/setExam';
+import React, { Component } from 'react';
+import '../css/exam.css';
 
-class setExam extends Comment {
+class setExam extends Component {
 
     constructor(props) {
         super(props);
@@ -16,7 +16,7 @@ class setExam extends Comment {
         return (
             <div>
                 <div className='top-upper-layer'>
-                    안녕하세요, {}
+                    안녕하세요
                 </div>
             </div>
         );

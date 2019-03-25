@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import {BrowserRouter as Router, Route, Link} from 'react-router-dom'; 
-import Login from './components/login';
+import {BrowserRouter as Router, Route} from 'react-router-dom'; 
 import Example from './components/setExam';
 
 

@@ -48,9 +48,13 @@ class Login extends Component {
     axios.get('http://localhost:3003/login/', {
       params: { id: uid, pass: upass }
     }).then(response => {
-      console.log(" ######## ");
-      this.props.history.push('/setExample');
-
+      console.log(" ######## ", response.data[0].name);
+      this.props.history.push(
+        {
+          pathname: '/setExample',
+          state: {name: response.data[0].name}
+        });
+        // this.props.history.push('/setExample');
 
     }).catch(exception => {
       console.log(" ex >>>> ", exception);

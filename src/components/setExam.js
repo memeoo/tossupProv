@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React,{Component} from 'react';
 import '../css/exam.css';
 
 class setExam extends Component {
@@ -9,14 +9,21 @@ class setExam extends Component {
 
         }
         // this.toggle = this.toggle.bind(this);
+        
 
+    }
+
+    getName(){
+        let name = this.props.location.state.name;
+        console.log(" name => ", name);
+        return name+"님"; 
     }
 
     render() {
         return (
             <div>
                 <div className='top-upper-layer'>
-                    안녕하세요
+                    안녕하세요 {this.getName()}
                 </div>
             </div>
         );

@@ -54,7 +54,6 @@ class Login extends Component {
           pathname: '/setExample',
           state: {name: response.data[0].name}
         });
-        // this.props.history.push('/setExample');
 
     }).catch(exception => {
       console.log(" ex >>>> ", exception);

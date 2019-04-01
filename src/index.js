@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import {BrowserRouter as Router, Route} from 'react-router-dom'; 
-import Example from './components/setExam';
+import Example from './components/listExam';
 
 
 import './index.css';

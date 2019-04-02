@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import {BrowserRouter as Router, Route} from 'react-router-dom'; 
-import Example from './components/listExam';
-
+import ListExam from './components/listExam';
+import SetNewExam from './components/setExam';
 
 import './index.css';
 import App from './App';
@@ -13,7 +13,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 ReactDOM.render(
     <Router>
         <Route exact path="/" component={App}/>
-        <Route path="/setExample" component={Example}/>
+        <Route path="/listExam" component={ListExam}/>
+        <Route path="/setNewExam" component={SetNewExam}/>
     </Router>
     , document.getElementById('root'));
 

@@ -7,3 +7,17 @@
     margin-top: 30px;
     margin-bottom: 30px; 
 }
+.list-exam-main{
+    width: 600px;
+}
+.set-exam-main{
+    padding: 13px;
+}
+.question-area{
+    border: 2px solid #ddd;
+    border-radius: 0.215rem;
+    padding: 13px;
+}
+.question{
+    padding: 6px;
+}

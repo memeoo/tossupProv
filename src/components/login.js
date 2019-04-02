@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import { Button, Form, FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import '../../src/App.css';
@@ -16,6 +15,7 @@ class Login extends Component {
     }
     this.toggle = this.toggle.bind(this);
     this.warningToggle = this.warningToggle.bind(this);
+    
     // this.setWarningText = this.setWarningText.bind(this);
     
   }
@@ -36,10 +36,6 @@ class Login extends Component {
     event.preventDefault()
     let uid = event.target.id.value;
     let upass = event.target.pass.value;
-
-    // console.log(event.target.elements.id.value);
-    // console.log(event.target.id.value);
-    // console.log(event.target[0].value);
     
     if(uid.length === 0 || upass.length === 0){
       return;
@@ -51,7 +47,7 @@ class Login extends Component {
       console.log(" ######## ", response.data[0].name);
       this.props.history.push(
         {
-          pathname: '/setExample',
+          pathname: '/listExam',
           state: {name: response.data[0].name}
         });
 
@@ -99,9 +95,7 @@ class Login extends Component {
     })
   }
 
-
   render() {
-  
     return (
       <div className="App">
         <div style={{ marginTop: "33px" }}>

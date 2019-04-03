@@ -1,6 +1,7 @@
 .title-layer{
-    margin-left: 10px;
-    margin-top: 10px;    
+    margin-top: 10px;   
+    font-weight: bolder;
+    font-size: 25px; 
 }
 .new-exam-btn{
     width: 200px;
@@ -23,15 +24,33 @@
 .question{
     padding: 6px;
 }
-.img-upload{
+.img-upload-pic{
     width: 350px;
     height: 220px;
     border: 2px solid #ddd;
     border-radius: 0.215rem;
     margin-top:10px;
 }
+.img-upload-chart{
+    width: 550px;
+    height: 320px;
+    border: 2px solid #ddd;
+    border-radius: 0.215rem;
+    margin-top:10px;
+}
+
 .audio-question{
     display: inline-block;
     padding:5px;
-    margin: 10px;
+    margin-right: 20px;
+}
+.inner-question{
+    margin-bottom: 8px;
+}
+.btn-area{
+   margin-top: 20px;
+   width: 550px;
+   margin: 0 auto;
+   text-align: center;
+   
 }

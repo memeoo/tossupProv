@@ -15,12 +15,20 @@ class SetExam extends Component {
 
     }
 
+    seePreview() {
+        console.log("See Preview");
+    }
+
+    saveExam() {
+        console.log("Save Exam!");
+    }
+
     submitNewExam() {
-        console.log("New Exam!");
+        console.log("Submit New Exam!");
     }
 
     imageUpload(part){
-        console.log("New Exam!");
+        console.log("Image uploading!");
         var file = null; 
         if(part === "part2"){
             file = document.getElementById('pic_read');
@@ -44,6 +52,32 @@ class SetExam extends Component {
           }
     }
 
+    audioUpload(question){
+        console.log("Audio uploading!");   
+        var file = document.getElementById(question);
+        file.click();
+        file.onchange = function(){
+            var fileList = file.files;   
+
+            if(typeof(fileList[0]) === "undefined"){
+                console.log( " Undefined !!");
+                return;
+            }
+
+            var reader = new FileReader();
+            console.log(" typeof(fileList[0]) => ", typeof(fileList[0]));
+   
+            reader.readAsDataURL(fileList[0]);
+            let btnId = question + "btn";
+            
+            reader.onload = function(){
+                console.log("btnID => ", btnId);
+                document.getElementById(btnId).innerText = "File uploaded";
+            //   imgRes = reader.result;
+            };
+          }
+    }
+
     render() {
         return (
             <div className="set-exam-main">
@@ -52,16 +86,16 @@ class SetExam extends Component {
                 </div>
                 <div className="question-area">
                     <div>Question 1</div>
-                    <Input type="textarea" className="question"></Input>
+                    <Input type="textarea" className="question" id="ques1"></Input>
                     <div style={{ marginTop: "10px" }}>Question 2</div>
-                    <Input type="textarea" className="question"></Input>
+                    <Input type="textarea" className="question" id="ques2"></Input>
                 </div>
                 <div className='title-layer'>
                     PART 2
                 </div>
                 <div className="question-area">
                     <div>Question 3</div>
-                    <input type='file' id='pic_read' width="350px" height="220px" accept="image/*" hidden/>
+                    <input type='file' id='pic_read' width="350px" height="220px" id="ques3" accept="image/*" hidden/>
                     <img src={logo} id="uploadImgPic"className="img-upload-pic" onClick={() => this.imageUpload("part2")} ></img>
                 </div>
                 <div className='title-layer'>
@@ -70,15 +104,18 @@ class SetExam extends Component {
                 <div className="question-area">
                     <div className="audio-question">
                       <div className="inner-question">Question 4</div>
-                      <Button color="secondary" type="submit">음성 파일 선택</Button>
+                      <input type='file' id='ques4'  hidden/>
+                      <Button color="secondary" type="submit" id="ques4btn" onClick={() => this.audioUpload("ques4")}>음성 파일 선택</Button>
                     </div>
                     <div className="audio-question">
                       <div className="inner-question">Question 5</div>
-                      <Button color="secondary" type="submit">음성 파일 선택</Button>
+                      <input type='file' id='ques5' accept="audio/*" hidden/>
+                      <Button color="secondary" type="submit" id="ques5btn" onClick={() => this.audioUpload("ques5")}>음성 파일 선택</Button>
                     </div>
                     <div className="audio-question">
                       <div className="inner-question">Question 6</div>
-                      <Button color="secondary" type="submit">음성 파일 선택</Button>
+                      <input type='file' id='ques6' accept="audio/*" hidden/>
+                      <Button color="secondary" type="submit" id="ques6btn" onClick={() => this.audioUpload("ques6")}>음성 파일 선택</Button>
                     </div>
                 </div>
                 <div className='title-layer'>
@@ -91,15 +128,18 @@ class SetExam extends Component {
                     </div>
                     <div className="audio-question">
                       <div className="inner-question">Question 7</div>
-                      <Button color="secondary" type="submit">음성 파일 선택</Button>
+                      <input type='file' id='ques7' accept="audio/*" hidden/>
+                      <Button color="secondary" type="submit" id="ques7btn" onClick={() => this.audioUpload("ques7")}>음성 파일 선택</Button>
                     </div>
                     <div className="audio-question">
                       <div className="inner-question">Question 8</div>
-                      <Button color="secondary" type="submit">음성 파일 선택</Button>
+                      <input type='file' id='ques8' accept="audio/*" hidden/>
+                      <Button color="secondary" type="submit" id="ques8btn" onClick={() => this.audioUpload("ques8")}>음성 파일 선택</Button>
                     </div>
                     <div className="audio-question">
                       <div className="inner-question">Question 9</div>
-                      <Button color="secondary" type="submit">음성 파일 선택</Button>
+                      <input type='file' id='ques9' accept="audio/*" hidden/>
+                      <Button color="secondary" type="submit" id="ques9btn" onClick={() => this.audioUpload("ques9")}>음성 파일 선택</Button>
                     </div>
                 </div>
                 <div className='title-layer'>
@@ -107,25 +147,26 @@ class SetExam extends Component {
                 </div>
                 <div className="question-area">
                     <div className="inner-question">Question 10</div>
-                    <Button color="secondary" type="submit">음성 파일 선택</Button>
+                    <input type='file' id='ques10' accept="audio/*" hidden/>
+                    <Button color="secondary" type="submit" id="ques10btn" onClick={() => this.audioUpload("ques10")}>음성 파일 선택</Button>
                 </div>
                 <div className='title-layer'>
                     PART 6
                 </div>
                 <div className="question-area">
                     <div className="inner-question">Question 11</div>
-                    <Input type="textarea" className="question"></Input>
+                    <Input type="textarea" className="question" id="ques11"></Input>
                 </div>
                 <div style={{height:"20px"}}></div>
                 <div className="btn-area">
                     <div className="audio-question">
-                        <Button color="secondary" type="submit">미리보기(Preview)</Button>
+                        <Button color="secondary" type="submit" onClick={() => this.seePreview()}>미리보기(Preview)</Button>
                     </div>
                     <div className="audio-question">
-                        <Button color="secondary" type="submit">임시저장(Save)</Button>
+                        <Button color="secondary" type="submit" onClick={() => this.saveExam()}>임시저장(Save)</Button>
                     </div>
                     <div className="audio-question">
-                        <Button color="secondary" type="submit" >제 출(Submit)</Button>
+                        <Button color="secondary" type="submit" onClick={() => this.submitNewExam()}>제 출(Submit)</Button>
                     </div>
                 </div>
             </div>

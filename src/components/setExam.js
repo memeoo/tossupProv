@@ -5,12 +5,14 @@ import { withRouter } from 'react-router-dom';
 import logo from '../asset/tossuplog.png'
 
 class SetExam extends Component {
-
+    
     constructor(props) {
         super(props);
         this.state = {
-
+            ques3Img: "",
+            chartImg: "",
         }
+
         // this.toggle = this.toggle.bind(this);
 
     }
@@ -19,8 +21,15 @@ class SetExam extends Component {
         console.log("See Preview");
     }
 
-    saveExam() {
-        console.log("Save Exam!");
+    saveExam = (event) => {
+        event.preventDefault()
+        let ques1 = event.target.ques1.value;
+        let ques2 = event.target.ques2.value;
+        console.log(" ques1 => ", ques1);
+        console.log(" ques2 => ", ques2);
+        console.log(" ques3Img => ", this.state.ques3Img);
+        console.log(" chartImg => ", this.chartImg);
+
     }
 
     submitNewExam() {
@@ -29,12 +38,17 @@ class SetExam extends Component {
 
     imageUpload(part){
         console.log("Image uploading!");
-        var file = null; 
+        var file = null;
+        console.log(" part => ", part); 
         if(part === "part2"){
             file = document.getElementById('pic_read');
+            console.log(" file => ", file); 
         }else{
             file = document.getElementById('chart_read');
+            console.log(" file => ", file); 
         }
+        console.log(" > ", this.state.ques3Img)
+        let img = "";
         file.click();
         file.onchange = function(){
             var fileList = file.files;
@@ -44,12 +58,16 @@ class SetExam extends Component {
             reader.onload = function(){
               if(part === "part2"){
                 document.getElementById('uploadImgPic').src = reader.result;
+                img = reader.result;
+                // console.log(" img >>>>>>> ", this.state.ques3Img)
               }else{
                 document.getElementById('uploadImgChart').src = reader.result;
+                this.chartImg = reader.result;
               }
             //   imgRes = reader.result;
             };
-          }
+        }
+        this.state.ques3Img = img;
     }
 
     audioUpload(question){
@@ -81,6 +99,7 @@ class SetExam extends Component {
     render() {
         return (
             <div className="set-exam-main">
+            <Form onSubmit={this.saveExam}>
                 <div className='title-layer'>
                     PART 1
                 </div>
@@ -95,7 +114,7 @@ class SetExam extends Component {
                 </div>
                 <div className="question-area">
                     <div>Question 3</div>
-                    <input type='file' id='pic_read' width="350px" height="220px" id="ques3" accept="image/*" hidden/>
+                    <input type='file' id='pic_read' width="350px" height="220px" accept="image/*" hidden/>
                     <img src={logo} id="uploadImgPic"className="img-upload-pic" onClick={() => this.imageUpload("part2")} ></img>
                 </div>
                 <div className='title-layer'>
@@ -160,15 +179,16 @@ class SetExam extends Component {
                 <div style={{height:"20px"}}></div>
                 <div className="btn-area">
                     <div className="audio-question">
-                        <Button color="secondary" type="submit" onClick={() => this.seePreview()}>미리보기(Preview)</Button>
+                        <Button color="secondary" onClick={() => this.seePreview()}>미리보기(Preview)</Button>
                     </div>
                     <div className="audio-question">
-                        <Button color="secondary" type="submit" onClick={() => this.saveExam()}>임시저장(Save)</Button>
+                        <Button color="secondary" type="submit" >임시저장(Save)</Button>
                     </div>
                     <div className="audio-question">
-                        <Button color="secondary" type="submit" onClick={() => this.submitNewExam()}>제 출(Submit)</Button>
+                        <Button color="secondary" onClick={() => this.submitNewExam()}>제 출(Submit)</Button>
                     </div>
                 </div>
+                </Form>
             </div>
         );
     }

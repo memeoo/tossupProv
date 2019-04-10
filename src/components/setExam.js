@@ -25,6 +25,7 @@ class SetExam extends Component {
         event.preventDefault()
         let ques1 = event.target.ques1.value;
         let ques2 = event.target.ques2.value;
+        this.state.ques3Img = document.getElementById('uploadImgPic').src;
         console.log(" ques1 => ", ques1);
         console.log(" ques2 => ", ques2);
         console.log(" ques3Img => ", this.state.ques3Img);
@@ -39,6 +40,7 @@ class SetExam extends Component {
     imageUpload(part){
         console.log("Image uploading!");
         var file = null;
+        var reader = new FileReader();
         console.log(" part => ", part); 
         if(part === "part2"){
             file = document.getElementById('pic_read');
@@ -52,22 +54,16 @@ class SetExam extends Component {
         file.click();
         file.onchange = function(){
             var fileList = file.files;
-            var reader = new FileReader();
             reader.readAsDataURL(fileList[0]);
-  
             reader.onload = function(){
               if(part === "part2"){
                 document.getElementById('uploadImgPic').src = reader.result;
-                img = reader.result;
-                // console.log(" img >>>>>>> ", this.state.ques3Img)
               }else{
                 document.getElementById('uploadImgChart').src = reader.result;
-                this.chartImg = reader.result;
-              }
-            //   imgRes = reader.result;
+              }  
             };
         }
-        this.state.ques3Img = img;
+       
     }
 
     audioUpload(question){

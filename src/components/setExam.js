@@ -3,14 +3,25 @@ import '../css/exam.css';
 import { Button, Form, FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { withRouter } from 'react-router-dom';
 import logo from '../asset/tossuplog.png'
+import axios from 'axios';
 
 class SetExam extends Component {
     
     constructor(props) {
         super(props);
         this.state = {
-            ques3Img: "",
-            chartImg: "",
+            ques1txt : "", 
+            ques2txt : "",
+            ques3Img : "",
+            ques4aud : "",
+            ques5aud : "",
+            ques6aud : "",
+            part4Img : "",
+            ques7aud : "",
+            ques8aud : "",
+            ques9aud : "",
+            ques10aud : "",
+            ques11txt : "",
         }
 
         // this.toggle = this.toggle.bind(this);
@@ -23,13 +34,33 @@ class SetExam extends Component {
 
     saveExam = (event) => {
         event.preventDefault()
-        let ques1 = event.target.ques1.value;
-        let ques2 = event.target.ques2.value;
+        this.state.ques1txt = event.target.ques1.value;
+        this.state.ques2txt = event.target.ques2.value;
         this.state.ques3Img = document.getElementById('uploadImgPic').src;
-        console.log(" ques1 => ", ques1);
-        console.log(" ques2 => ", ques2);
-        console.log(" ques3Img => ", this.state.ques3Img);
+        this.state.ques4aud = document.getElementById('ques4btn').src;
+        this.state.ques5aud = document.getElementById('ques5btn').src;
+        this.state.ques6aud = document.getElementById('ques6btn').src;
+        this.state.part4Img = document.getElementById('uploadImgChart').src;
+        this.state.ques7aud = document.getElementById('ques7btn').src;
+        this.state.ques8aud = document.getElementById('ques8btn').src;
+        this.state.ques9aud = document.getElementById('ques9btn').src;
+        this.state.ques10aud = document.getElementById('ques10btn').src;
+        this.state.ques11txt = event.target.ques11.value;
+
+        console.log(" ques1 => ", this.state.ques1Txt);
+        console.log(" ques2 => ", this.state.ques2Txt);
+        console.log(" ques4Aud => ", this.state.ques4aud);
         console.log(" chartImg => ", this.chartImg);
+
+        axios.post('http://localhost:3003/saveExam/', this.state).then(response => {
+            console.log(" res >>>> ", response);
+            if (response.status === 200) {
+                this.toggle();
+            }
+        }).catch(exception => {
+            console.log(" ex >>>> ", exception);
+        })
+
 
     }
 
@@ -70,6 +101,7 @@ class SetExam extends Component {
         console.log("Audio uploading!");   
         var file = document.getElementById(question);
         file.click();
+     
         file.onchange = function(){
             var fileList = file.files;   
 
@@ -78,15 +110,15 @@ class SetExam extends Component {
                 return;
             }
 
-            var reader = new FileReader();
             console.log(" typeof(fileList[0]) => ", typeof(fileList[0]));
-   
+            var reader = new FileReader();
             reader.readAsDataURL(fileList[0]);
             let btnId = question + "btn";
             
             reader.onload = function(){
                 console.log("btnID => ", btnId);
                 document.getElementById(btnId).innerText = "File uploaded";
+                document.getElementById(btnId).src = reader.result;
             //   imgRes = reader.result;
             };
           }

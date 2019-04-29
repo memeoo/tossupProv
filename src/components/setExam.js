@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import logo from '../asset/tossuplog.png'
 import axios from 'axios';
 
+
 class SetExam extends Component {
     
     constructor(props) {
@@ -34,6 +35,7 @@ class SetExam extends Component {
 
     saveExam = (event) => {
         event.preventDefault()
+        console.log(" event.target.ques1 => ", event.target);
         this.state.ques1txt = event.target.ques1.value;
         this.state.ques2txt = event.target.ques2.value;
         this.state.ques3Img = document.getElementById('uploadImgPic').src;
@@ -49,8 +51,8 @@ class SetExam extends Component {
 
         console.log(" ques1 => ", this.state.ques1Txt);
         console.log(" ques2 => ", this.state.ques2Txt);
-        console.log(" ques4Aud => ", this.state.ques4aud);
-        console.log(" chartImg => ", this.chartImg);
+        // console.log(" ques4Aud => ", this.state.ques4aud);
+        // console.log(" chartImg => ", this.state.part4Img);
 
         axios.post('http://localhost:3003/saveExam/', this.state).then(response => {
             console.log(" res >>>> ", response);
@@ -131,12 +133,16 @@ class SetExam extends Component {
                 <div className='title-layer'>
                     PART 1
                 </div>
-                <div className="question-area">
-                    <div>Question 1</div>
-                    <Input type="textarea" className="question" id="ques1"></Input>
-                    <div style={{ marginTop: "10px" }}>Question 2</div>
-                    <Input type="textarea" className="question" id="ques2"></Input>
-                </div>
+                    <div className="question-area">
+                        <div>Question 1</div>
+                        <FormGroup>
+                            <Input type="textarea" className="question" id="ques1" name="ques1"></Input>
+                        </FormGroup>
+                        <div style={{ marginTop: "10px" }}>Question 2</div>
+                        <FormGroup>
+                            <Input type="textarea" className="question" id="ques2" name="ques2"></Input>
+                        </FormGroup>
+                    </div>
                 <div className='title-layer'>
                     PART 2
                 </div>
@@ -202,7 +208,7 @@ class SetExam extends Component {
                 </div>
                 <div className="question-area">
                     <div className="inner-question">Question 11</div>
-                    <Input type="textarea" className="question" id="ques11"></Input>
+                    <Input type="textarea" className="question" id="ques11" name="ques11"></Input>
                 </div>
                 <div style={{height:"20px"}}></div>
                 <div className="btn-area">

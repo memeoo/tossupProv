@@ -1,6 +1,9 @@
 import React,{Component} from 'react';
 import '../css/exam.css';
 import {withRouter} from 'react-router-dom'; 
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 
 import { Button, Form, FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
@@ -41,7 +44,7 @@ class ListExam extends Component {
                 <div className="new-exam-btn">
                     <Button color="primary" size="lg" block onClick={() => this.moveSetNewExam(this.props)}>새 문제 출제하기</Button>
                 </div>
-                <div id="examRecords" className='exam-record'>
+                <div className="examed-lists">
 
                 </div>
             </div>

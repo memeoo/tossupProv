@@ -5,56 +5,71 @@ import { withRouter } from 'react-router-dom';
 import logo from '../asset/tossuplog.png'
 import axios from 'axios';
 
-
+const data = new FormData();
 class SetExam extends Component {
     
     constructor(props) {
         super(props);
         this.state = {
-            ques1txt : "", 
-            ques2txt : "",
-            ques3Img : "",
-            ques4aud : "",
-            ques5aud : "",
-            ques6aud : "",
-            part4Img : "",
-            ques7aud : "",
-            ques8aud : "",
-            ques9aud : "",
-            ques10aud : "",
-            ques11txt : "",
+
         }
-
         // this.toggle = this.toggle.bind(this);
-
+        this.userId = this.props.location.state.name;
     }
 
     seePreview() {
         console.log("See Preview");
     }
-
+    
+    // onChangeHandler=event=>{
+    //     console.log(event.target.files[0])
+    //     this.setState({
+    //         selectedFile: event.target.files[0],
+    //         loaded: 0,
+    //     })
+    // }
+   
     saveExam = (event) => {
         event.preventDefault()
         console.log(" event.target.ques1 => ", event.target);
-        this.state.ques1txt = event.target.ques1.value;
-        this.state.ques2txt = event.target.ques2.value;
-        this.state.ques3Img = document.getElementById('uploadImgPic').src;
-        this.state.ques4aud = document.getElementById('ques4btn').src;
-        this.state.ques5aud = document.getElementById('ques5btn').src;
-        this.state.ques6aud = document.getElementById('ques6btn').src;
-        this.state.part4Img = document.getElementById('uploadImgChart').src;
-        this.state.ques7aud = document.getElementById('ques7btn').src;
-        this.state.ques8aud = document.getElementById('ques8btn').src;
-        this.state.ques9aud = document.getElementById('ques9btn').src;
-        this.state.ques10aud = document.getElementById('ques10btn').src;
-        this.state.ques11txt = event.target.ques11.value;
 
-        console.log(" ques1 => ", this.state.ques1Txt);
-        console.log(" ques2 => ", this.state.ques2Txt);
-        // console.log(" ques4Aud => ", this.state.ques4aud);
-        // console.log(" chartImg => ", this.state.part4Img);
+        let q1 = event.target.ques1.value;
+        let q2 = event.target.ques2.value;
+        // let q3= document.getElementById('uploadImgPic').src;
+        // let q4 = document.getElementById('ques4btn').src;
+        // let q5 = document.getElementById('ques5btn').src;
+        // let q6= document.getElementById('ques6btn').src;
+        // let qchart= document.getElementById('uploadImgChart').src;
+        // let q7 = document.getElementById('ques7btn').src;
+        // let q8 = document.getElementById('ques8btn').src;
+        // let q9= document.getElementById('ques9btn').src;
+        // let q10 = document.getElementById('ques10btn').src;
+        let q11 = event.target.ques11.value;
+        
+        console.log(" q1 >>> ", q1);
+        console.log(" q2 >>> ", q2);
+        console.log(" q3 >>> ", q11);
 
-        axios.post('http://localhost:3003/saveExam/', this.state).then(response => {
+
+        data.append('ques1', q1);
+        data.append('ques2', q2);
+        // data.append('ques3Img', q3);
+        // data.append('ques4aud', q4);
+        // data.append('ques5aud', q5);
+        // data.append('ques6aud', q6);
+        // data.append('part4Img', window.atob(qchart));
+        // data.append('ques7aud', q7);
+        // data.append('ques8aud', q8);
+        // data.append('ques9aud', q9);
+        // data.append('ques10aud',q10);
+        data.append('ques11', q11);
+        data.append('provId', this.userId);
+
+        console.log(" q1 => ", data.get('ques1'));
+        console.log(" q2 => ", data.get('ques2'));
+        console.log(" q3 => ", data.get('ques11'));
+
+        axios.post('http://localhost:3003/saveExam/', data).then(response => {
             console.log(" res >>>> ", response);
             if (response.status === 200) {
                 this.toggle();
@@ -62,12 +77,11 @@ class SetExam extends Component {
         }).catch(exception => {
             console.log(" ex >>>> ", exception);
         })
-
-
     }
 
     submitNewExam() {
         console.log("Submit New Exam!");
+        // if(this.state.ques3Img.includes())
     }
 
     imageUpload(part){
@@ -82,21 +96,22 @@ class SetExam extends Component {
             file = document.getElementById('chart_read');
             console.log(" file => ", file); 
         }
-        console.log(" > ", this.state.ques3Img)
+ 
         let img = "";
         file.click();
         file.onchange = function(){
-            var fileList = file.files;
+            let fileList = file.files;
+            
             reader.readAsDataURL(fileList[0]);
             reader.onload = function(){
               if(part === "part2"){
                 document.getElementById('uploadImgPic').src = reader.result;
+                data.append("ques3Img",fileList[0]);
               }else{
                 document.getElementById('uploadImgChart').src = reader.result;
               }  
-            };
-        }
-       
+            };   
+        }     
     }
 
     audioUpload(question){
@@ -120,7 +135,8 @@ class SetExam extends Component {
             reader.onload = function(){
                 console.log("btnID => ", btnId);
                 document.getElementById(btnId).innerText = "File uploaded";
-                document.getElementById(btnId).src = reader.result;
+                // document.getElementById(btnId).src = reader.result;
+                data.append(btnId, fileList[0])
             //   imgRes = reader.result;
             };
           }
@@ -135,13 +151,13 @@ class SetExam extends Component {
                 </div>
                     <div className="question-area">
                         <div>Question 1</div>
-                        <FormGroup>
-                            <Input type="textarea" className="question" id="ques1" name="ques1"></Input>
-                        </FormGroup>
+
+                            <Input type="textarea" className="question" id="ques1" ></Input>
+           
                         <div style={{ marginTop: "10px" }}>Question 2</div>
-                        <FormGroup>
-                            <Input type="textarea" className="question" id="ques2" name="ques2"></Input>
-                        </FormGroup>
+                      
+                            <Input type="textarea" className="question" id="ques2" ></Input>
+                       
                     </div>
                 <div className='title-layer'>
                     PART 2

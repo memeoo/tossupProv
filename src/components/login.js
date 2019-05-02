@@ -48,7 +48,7 @@ class Login extends Component {
       this.props.history.push(
         {
           pathname: '/listExam',
-          state: {name: response.data[0].name}
+          state: {name: response.data[0].name, id: response.data[0].id}
         });
 
     }).catch(exception => {

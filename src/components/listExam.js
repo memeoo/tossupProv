@@ -30,7 +30,7 @@ class ListExam extends Component {
         prop.history.push(
         {
             pathname: '/setNewExam',
-            //   state: {name: response.data[0].name}
+              state: {name: this.props.location.state.id}
         });
     
     }

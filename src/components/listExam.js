@@ -27,10 +27,11 @@ class ListExam extends Component {
     moveSetNewExam(prop){
         console.log("New Exam!");
         console.log(" this.props => ", this.props);
-        prop.history.push(
+        console.log(" this.props aaa => ", this.props.location.state.id);
+        this.props.history.push(
         {
             pathname: '/setNewExam',
-              state: {name: this.props.location.state.id}
+            state: {id: this.props.location.state.id}
         });
     
     }

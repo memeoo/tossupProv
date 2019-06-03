@@ -3,79 +3,78 @@ import '../css/exam.css';
 import { Button, Form, FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { withRouter } from 'react-router-dom';
 import logo from '../asset/tossuplog.png'
-import axios from 'axios';
+import axios, { post } from 'axios';
 
-const data = new FormData();
+const fileData = new FormData();
 class SetExam extends Component {
     
     constructor(props) {
         super(props);
         this.state = {
-
+            selectedFiles: [],
+            t1:"",
+            t2:"",
+            t3:"",
         }
-        // this.toggle = this.toggle.bind(this);
-        this.userId = this.props.location.state.name;
+
     }
 
     seePreview() {
         console.log("See Preview");
     }
-    
-    // onChangeHandler=event=>{
-    //     console.log(event.target.files[0])
-    //     this.setState({
-    //         selectedFile: event.target.files[0],
-    //         loaded: 0,
-    //     })
-    // }
    
     saveExam = (event) => {
         event.preventDefault()
-        console.log(" event.target.ques1 => ", event.target);
-
-        let q1 = event.target.ques1.value;
-        let q2 = event.target.ques2.value;
-        // let q3= document.getElementById('uploadImgPic').src;
-        // let q4 = document.getElementById('ques4btn').src;
-        // let q5 = document.getElementById('ques5btn').src;
-        // let q6= document.getElementById('ques6btn').src;
-        // let qchart= document.getElementById('uploadImgChart').src;
-        // let q7 = document.getElementById('ques7btn').src;
-        // let q8 = document.getElementById('ques8btn').src;
-        // let q9= document.getElementById('ques9btn').src;
-        // let q10 = document.getElementById('ques10btn').src;
-        let q11 = event.target.ques11.value;
-        
-        console.log(" q1 >>> ", q1);
-        console.log(" q2 >>> ", q2);
-        console.log(" q3 >>> ", q11);
+      
+        let textData = {};
+        textData.q1 = this.state.t1;
+        textData.q2 = this.state.t2;
+        textData.q11 = this.state.t3;
+        let id = this.props.location.state.id;
+        textData.id = id;
+        console.log(" textData => ", textData);
 
 
-        data.append('ques1', q1);
-        data.append('ques2', q2);
-        // data.append('ques3Img', q3);
-        // data.append('ques4aud', q4);
-        // data.append('ques5aud', q5);
-        // data.append('ques6aud', q6);
-        // data.append('part4Img', window.atob(qchart));
-        // data.append('ques7aud', q7);
-        // data.append('ques8aud', q8);
-        // data.append('ques9aud', q9);
-        // data.append('ques10aud',q10);
-        data.append('ques11', q11);
-        data.append('provId', this.userId);
-
-        console.log(" q1 => ", data.get('ques1'));
-        console.log(" q2 => ", data.get('ques2'));
-        console.log(" q3 => ", data.get('ques11'));
-
-        axios.post('http://localhost:3003/saveExam/', data).then(response => {
-            console.log(" res >>>> ", response);
+        // id를 인자로 넘겨서 id값이 "" 이면 새 출제, 
+        // 아니면, 해당 id 문제 수정 
+        // 일단 생성 되면 listExam에 보이기. 
+        axios.post('http://localhost:3003/saveExam/', textData).then(response => {
+            console.log(" res text >>>> ", response);
             if (response.status === 200) {
-                this.toggle();
+                console.log(" fileData => ", fileData.get("uploadImgChart"));
+                // axios.post('http://localhost:3003/saveFile/', fileData).then(response => {
+                //     console.log(" res file >>>> ", response);
+                //     if (response.status === 200) {
+
+                //     }
+                // });
+                // let dataTemp = {aa: "bb"};
+                
+                axios({
+                    url: 'http://localhost:3003/saveFile/',
+                    method: 'POST',
+                    data: fileData,
+                    headers: {
+                      Accept: 'application/json',
+                      'Content-Type': 'multipart/form-data'
+                    }
+                  }).then(response => {
+                    console.log(" ex response >>>> ", response);
+                  })
+                  .catch(exception => {
+                    console.log(" ex file >>>> ", exception);
+                })
+
+                // const url ="http://localhost:3003/saveFile/";
+                // const config = {
+                //     headers: {
+                //         'content-type': 'multipart/form-data'
+                //     }
+                // };
+                // post(url, fileData, config);
             }
         }).catch(exception => {
-            console.log(" ex >>>> ", exception);
+            console.log(" ex text >>>> ", exception);
         })
     }
 
@@ -84,79 +83,90 @@ class SetExam extends Component {
         // if(this.state.ques3Img.includes())
     }
 
-    imageUpload(part){
+    imageUpload = (event)=> {
         console.log("Image uploading!");
-        var file = null;
+        let fileInputDom = null;
         var reader = new FileReader();
-        console.log(" part => ", part); 
-        if(part === "part2"){
-            file = document.getElementById('pic_read');
-            console.log(" file => ", file); 
+        let compId = event.target.id;
+        console.log(" compId => ", event.target.id); 
+        if(compId == "uploadImgPic"){
+            fileInputDom = document.getElementsByName("q3")[0];
         }else{
-            file = document.getElementById('chart_read');
-            console.log(" file => ", file); 
+            fileInputDom = document.getElementsByName("qChart")[0];
         }
- 
-        let img = "";
-        file.click();
-        file.onchange = function(){
-            let fileList = file.files;
-            
-            reader.readAsDataURL(fileList[0]);
-            reader.onload = function(){
-              if(part === "part2"){
-                document.getElementById('uploadImgPic').src = reader.result;
-                data.append("ques3Img",fileList[0]);
-              }else{
-                document.getElementById('uploadImgChart').src = reader.result;
-              }  
-            };   
+
+        fileInputDom.click();
+        fileInputDom.onchange = function(){
+            if(fileInputDom.files){
+                let fileList = fileInputDom.files;
+                console.log(" files ===> ",fileList[0]);
+                fileData.append(compId, fileList[0]);
+                
+     
+                reader.readAsDataURL(fileList[0]);
+                reader.onload = function(){
+                    document.getElementById(compId).src = reader.result;
+                };   
+            }
+            // console.log(" selectedFile => ", selectedFiles);
         }     
     }
 
-    audioUpload(question){
-        console.log("Audio uploading!");   
-        var file = document.getElementById(question);
-        file.click();
-     
-        file.onchange = function(){
-            var fileList = file.files;   
+    audioUpload = event =>{
+        console.log("Audio uploading!"); 
+        let fileInputDom = null;
+        let compId = event.target.id;
+        console.log(" compId => ", event.target.id); 
+        let inputDomId = compId.replace("btn","");
+        fileInputDom = document.getElementById(inputDomId)
 
+        fileInputDom.click();
+        fileInputDom.onchange = function(){
+            var fileList = fileInputDom.files;   
             if(typeof(fileList[0]) === "undefined"){
                 console.log( " Undefined !!");
                 return;
             }
 
-            console.log(" typeof(fileList[0]) => ", typeof(fileList[0]));
+            fileData.append(compId, fileList[0]);
+            console.log(" files ===> ",fileData);
             var reader = new FileReader();
             reader.readAsDataURL(fileList[0]);
-            let btnId = question + "btn";
-            
             reader.onload = function(){
-                console.log("btnID => ", btnId);
-                document.getElementById(btnId).innerText = "File uploaded";
-                // document.getElementById(btnId).src = reader.result;
-                data.append(btnId, fileList[0])
-            //   imgRes = reader.result;
+                document.getElementById(compId).innerText = "File uploaded";
+                // data.append(compId, fileList[0])
             };
           }
+    }
+
+    onInputTextChangeHandler = event =>{
+        console.log(" @@@@ => " , event.target.value);
+        if(event.target.name == "ques1"){
+            this.setState({t1:event.target.value});
+        }else if(event.target.name == "ques2"){
+            this.setState({t2:event.target.value});
+        }else if(event.target.name == "ques11"){
+            this.setState({t3:event.target.value});
+        }
+
     }
 
     render() {
         return (
             <div className="set-exam-main">
-            <Form onSubmit={this.saveExam}>
+            {/* <Form onSubmit={this.saveExam}> */}
+            <Form encType="multipart/form-data" onSubmit={this.saveExam}>
                 <div className='title-layer'>
                     PART 1
                 </div>
                     <div className="question-area">
                         <div>Question 1</div>
 
-                            <Input type="textarea" className="question" id="ques1" ></Input>
+                            <Input type="textarea" className="question" id="ques1" onChange={this.onInputTextChangeHandler} name="ques1"></Input>
            
                         <div style={{ marginTop: "10px" }}>Question 2</div>
                       
-                            <Input type="textarea" className="question" id="ques2" ></Input>
+                            <Input type="textarea" className="question" id="ques2" onChange={this.onInputTextChangeHandler} name="ques2"></Input>
                        
                     </div>
                 <div className='title-layer'>
@@ -164,8 +174,8 @@ class SetExam extends Component {
                 </div>
                 <div className="question-area">
                     <div>Question 3</div>
-                    <input type='file' id='pic_read' width="350px" height="220px" accept="image/*" hidden/>
-                    <img src={logo} id="uploadImgPic"className="img-upload-pic" onClick={() => this.imageUpload("part2")} ></img>
+                    <input type='file' id='pic_read' name='q3' width="350px" height="220px" accept="image/*" hidden/>
+                    <img src={logo} id="uploadImgPic"className="img-upload-pic" onClick={this.imageUpload} ></img>
                 </div>
                 <div className='title-layer'>
                     PART 3
@@ -173,18 +183,18 @@ class SetExam extends Component {
                 <div className="question-area">
                     <div className="audio-question">
                       <div className="inner-question">Question 4</div>
-                      <input type='file' id='ques4'  hidden/>
-                      <Button color="secondary" type="submit" id="ques4btn" onClick={() => this.audioUpload("ques4")}>음성 파일 선택</Button>
+                      <input type='file' id='ques4' name='q4' accept="audio/*" hidden/>
+                      <Button color="secondary" id="ques4btn" onClick={this.audioUpload} >음성 파일 선택</Button>
                     </div>
                     <div className="audio-question">
                       <div className="inner-question">Question 5</div>
-                      <input type='file' id='ques5' accept="audio/*" hidden/>
-                      <Button color="secondary" type="submit" id="ques5btn" onClick={() => this.audioUpload("ques5")}>음성 파일 선택</Button>
+                      <input type='file' id='ques5' name='q5' accept="audio/*" hidden/>
+                      <Button color="secondary" id="ques5btn" onClick={this.audioUpload}>음성 파일 선택</Button>
                     </div>
                     <div className="audio-question">
                       <div className="inner-question">Question 6</div>
-                      <input type='file' id='ques6' accept="audio/*" hidden/>
-                      <Button color="secondary" type="submit" id="ques6btn" onClick={() => this.audioUpload("ques6")}>음성 파일 선택</Button>
+                      <input type='file' id='ques6' name='q6'  accept="audio/*" hidden/>
+                      <Button color="secondary" id="ques6btn" onClick={this.audioUpload}>음성 파일 선택</Button>
                     </div>
                 </div>
                 <div className='title-layer'>
@@ -192,23 +202,23 @@ class SetExam extends Component {
                 </div>
                 <div className="question-area">
                     <div>
-                        <input type='file' id='chart_read' width="550px" height="400px" accept="image/*" hidden/>
-                        <img src={logo} id="uploadImgChart"className="img-upload-chart" onClick={() => this.imageUpload("part4")} ></img>
+                        <input type='file' id='chart_read' name='qChart' width="550px" height="400px" accept="image/*" hidden/>
+                        <img src={logo} id="uploadImgChart"className="img-upload-chart" onClick={this.imageUpload} ></img>
                     </div>
-                    <div className="audio-question">
+                    <div className="audio-question"> 
                       <div className="inner-question">Question 7</div>
-                      <input type='file' id='ques7' accept="audio/*" hidden/>
-                      <Button color="secondary" type="submit" id="ques7btn" onClick={() => this.audioUpload("ques7")}>음성 파일 선택</Button>
+                      <input type='file' id='ques7' name='q7' accept="audio/*" hidden/>
+                      <Button color="secondary" id="ques7btn" onClick={this.audioUpload}>음성 파일 선택</Button>
                     </div>
                     <div className="audio-question">
                       <div className="inner-question">Question 8</div>
-                      <input type='file' id='ques8' accept="audio/*" hidden/>
-                      <Button color="secondary" type="submit" id="ques8btn" onClick={() => this.audioUpload("ques8")}>음성 파일 선택</Button>
+                      <input type='file' id='ques8' name='q8' accept="audio/*" hidden/>
+                      <Button color="secondary" id="ques8btn" onClick={this.audioUpload}>음성 파일 선택</Button>
                     </div>
                     <div className="audio-question">
                       <div className="inner-question">Question 9</div>
-                      <input type='file' id='ques9' accept="audio/*" hidden/>
-                      <Button color="secondary" type="submit" id="ques9btn" onClick={() => this.audioUpload("ques9")}>음성 파일 선택</Button>
+                      <input type='file' id='ques9' name='q9'  accept="audio/*" hidden/>
+                      <Button color="secondary"  id="ques9btn" onClick={this.audioUpload}>음성 파일 선택</Button>
                     </div>
                 </div>
                 <div className='title-layer'>
@@ -216,30 +226,30 @@ class SetExam extends Component {
                 </div>
                 <div className="question-area">
                     <div className="inner-question">Question 10</div>
-                    <input type='file' id='ques10' accept="audio/*" hidden/>
-                    <Button color="secondary" type="submit" id="ques10btn" onClick={() => this.audioUpload("ques10")}>음성 파일 선택</Button>
+                    <input type='file' id='ques10' name='q10'  accept="audio/*" hidden/>
+                    <Button color="secondary" id="ques10btn" onClick={this.audioUpload}>음성 파일 선택</Button>
                 </div>
                 <div className='title-layer'>
                     PART 6
                 </div>
                 <div className="question-area">
                     <div className="inner-question">Question 11</div>
-                    <Input type="textarea" className="question" id="ques11" name="ques11"></Input>
+                    <Input type="textarea" className="question" id="ques11" name="ques11" onChange={this.onInputTextChangeHandler}></Input>
                 </div>
-                <div style={{height:"20px"}}></div>
+                <div style={{height:"20px"}}></div>   
                 <div className="btn-area">
                     <div className="audio-question">
                         <Button color="secondary" onClick={() => this.seePreview()}>미리보기(Preview)</Button>
                     </div>
                     <div className="audio-question">
-                        <Button color="secondary" type="submit" >임시저장(Save)</Button>
+                        <Button color="secondary" type="submit" onClick={this.saveExam}>임시저장(Save)</Button>
                     </div>
                     <div className="audio-question">
                         <Button color="secondary" onClick={() => this.submitNewExam()}>제 출(Submit)</Button>
                     </div>
                 </div>
-                </Form>
-            </div>
+            </Form>
+        </div>
         );
     }
 }

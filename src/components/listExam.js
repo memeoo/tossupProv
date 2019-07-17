@@ -21,6 +21,7 @@ class ListExam extends Component {
     getName(){
         let name = this.props.location.state.name;
         console.log(" name => ", name);
+        console.log(" test log!! => ", name);
         return name+" 출제자 님"; 
     }
 

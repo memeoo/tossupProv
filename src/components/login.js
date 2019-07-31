@@ -3,6 +3,8 @@ import { Button, Form, FormGroup, Label, Input, Modal, ModalHeader, ModalBody, M
 import '../../src/App.css';
 import {withRouter} from 'react-router-dom';  
 import axios from 'axios';
+const URL = "http://ec2-13-125-232-40.ap-northeast-2.compute.amazonaws.com:3003";
+//const URL = "http://localhost:3003";
 
 class Login extends Component {
 
@@ -41,7 +43,8 @@ class Login extends Component {
       return;
     }
 
-    axios.get('http://localhost:3003/login/', {
+
+    axios.get(URL+'/login/', {
       params: { id: uid, pass: upass }
     }).then(response => {
       console.log(" ######## ", response.data[0]);
@@ -83,7 +86,7 @@ class Login extends Component {
       return;
     }
 
-    axios.post('http://localhost:3003/signup/', 
+    axios.post(URL+'/signup/', 
        { id: sid, pass: spass, name: sname, smail: smail }
     ).then(response => {
       console.log(" res >>>> ", response);
